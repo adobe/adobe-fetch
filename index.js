@@ -16,12 +16,12 @@ const auth = require('@adobe/jwt-auth');
 const merge = require('deepmerge');
 const NO_CONFIG = 'Auth configuration missing.';
 
-async function getToken(options, tokenCache, forceNewToken) {
-  if (!options.auth || !options.auth.clientId || !options.auth.metaScopes) {
+async function getToken(authOptions, tokenCache, forceNewToken) {
+  if (!authOptions || !authOptions.clientId || !authOptions.metaScopes) {
     throw NO_CONFIG;
   }
 
-  const key = options.auth.clientId + '|' + options.auth.metaScopes.join(',');
+  const key = authOptions.clientId + '|' + authOptions.metaScopes.join(',');
 
   let token = await tokenCache.get(key);
 
@@ -29,7 +29,7 @@ async function getToken(options, tokenCache, forceNewToken) {
     return token;
   } else {
     try {
-      token = await auth(options.auth);
+      token = await auth(authOptions);
       if (token) {
         return tokenCache.set(key, token);
       } else {
@@ -42,23 +42,23 @@ async function getToken(options, tokenCache, forceNewToken) {
   }
 }
 
-function addAuthHeaders(token, options) {
+function addAuthHeaders(token, options, authOptions) {
   return merge(options, {
     headers: {
       authorization: `${token.token_type} ${token.access_token}`,
-      'x-api-key': options.auth.clientId,
-      'x-gw-ims-org-id': options.auth.orgId
+      'x-api-key': authOptions.clientId,
+      'x-gw-ims-org-id': authOptions.orgId
     }
   });
 }
 
-async function _fetch(url, options, tokenCache, forceNewToken) {
-  const token = await getToken(options, tokenCache, forceNewToken);
-  const opts = addAuthHeaders(token, options);
+async function _fetch(url, options, configOptions, tokenCache, forceNewToken) {
+  const token = await getToken(configOptions.auth, tokenCache, forceNewToken);
+  const opts = addAuthHeaders(token, options, configOptions.auth);
   const res = await fetch(url, opts);
 
   if ((res.status === 401 || res.status === 403) && !forceNewToken) {
-    return await _fetch(url, options, tokenCache, true);
+    return await _fetch(url, options, configOptions, tokenCache, true);
   } else {
     return res;
   }
@@ -71,8 +71,8 @@ async function _fetch(url, options, tokenCache, forceNewToken) {
  * @param url
  * @param options
  */
-function adobefetch(url, options = {}, tokenCache) {
-  return _fetch(url, options, tokenCache, false);
+function adobefetch(url, options = {}, configOptions, tokenCache) {
+  return _fetch(url, options, configOptions, tokenCache, false);
 }
 
 function verifyConfig(options) {
@@ -94,6 +94,14 @@ function verifyConfig(options) {
   !metaScopes || metaScopes.length === 0 ? errors.push('metaScopes') : '';
   if (errors.length > 0) {
     throw `Required parameter(s) ${errors.join(', ')} are missing`;
+  } else if (
+    !(
+      typeof privateKey === 'string' ||
+      privateKey instanceof Buffer ||
+      ArrayBuffer.isView(privateKey)
+    )
+  ) {
+    throw 'Required parameter(s) privateKey is invalid';
   }
 }
 
@@ -107,7 +115,7 @@ function config(configOptions) {
   const tokenCache = cache.config(configOptions.auth);
 
   return (url, options = {}) =>
-    adobefetch(url, merge(configOptions, options), tokenCache);
+    adobefetch(url, options, configOptions, tokenCache);
 }
 
 module.exports = { config: config };
