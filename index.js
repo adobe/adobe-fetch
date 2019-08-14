@@ -17,10 +17,6 @@ const merge = require('deepmerge');
 const NO_CONFIG = 'Auth configuration missing.';
 
 async function getToken(authOptions, tokenCache, forceNewToken) {
-  if (!authOptions || !authOptions.clientId || !authOptions.metaScopes) {
-    throw NO_CONFIG;
-  }
-
   const key = authOptions.clientId + '|' + authOptions.metaScopes.join(',');
 
   let token = await tokenCache.get(key);
@@ -33,7 +29,7 @@ async function getToken(authOptions, tokenCache, forceNewToken) {
       if (token) {
         return tokenCache.set(key, token);
       } else {
-        throw 'Access token came empty.';
+        throw 'Access token empty';
       }
     } catch (err) {
       console.error('Error while getting a new access token.', err);
@@ -92,16 +88,19 @@ function verifyConfig(options) {
   !clientSecret ? errors.push('clientSecret') : '';
   !privateKey ? errors.push('privateKey') : '';
   !metaScopes || metaScopes.length === 0 ? errors.push('metaScopes') : '';
+
   if (errors.length > 0) {
     throw `Required parameter(s) ${errors.join(', ')} are missing`;
-  } else if (
+  }
+
+  if (
     !(
       typeof privateKey === 'string' ||
       privateKey instanceof Buffer ||
       ArrayBuffer.isView(privateKey)
     )
   ) {
-    throw 'Required parameter(s) privateKey is invalid';
+    throw 'Required parameter privateKey is invalid';
   }
 }
 

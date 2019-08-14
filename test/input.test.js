@@ -103,6 +103,6 @@ describe('Validate input', () => {
           privateKey
         }
       })
-    ).toThrow('Required parameter(s) privateKey is invalid');
+    ).toThrow('Required parameter privateKey is invalid');
   });
 });
