@@ -69,14 +69,16 @@ They you would create an array of **metaScopes** as part of the config object. F
 
 ```javascript
 const config = {
-  clientId: 'asasdfasf',
-  clientSecret: 'aslfjasljf-=asdfalasjdf==asdfa',
-  technicalAccountId: 'asdfasdfas@techacct.adobe.com',
-  orgId: 'asdfasdfasdf@AdobeOrg',
-  metaScopes: [
-    'https://ims-na1.adobelogin.com/s/ent_gdpr_sdk',
-    'https://ims-na1.adobelogin.com/s/ent_user_sdk'
-  ]
+  auth: {
+      clientId: 'asasdfasf',
+      clientSecret: 'aslfjasljf-=asdfalasjdf==asdfa',
+      technicalAccountId: 'asdfasdfas@techacct.adobe.com',
+      orgId: 'asdfasdfasdf@AdobeOrg',
+      metaScopes: [
+        'https://ims-na1.adobelogin.com/s/ent_gdpr_sdk',
+        'https://ims-na1.adobelogin.com/s/ent_user_sdk'
+      ]
+  }
 };
 ```
 
@@ -84,11 +86,13 @@ However, if you omit the IMS url the package will automatically add it for you w
 
 ```javascript
 const config = {
-  clientId: 'asasdfasf',
-  clientSecret: 'aslfjasljf-=asdfalasjdf==asdfa',
-  technicalAccountId: 'asdfasdfas@techacct.adobe.com',
-  orgId: 'asdfasdfasdf@AdobeOrg',
-  metaScopes: ['ent_gdpr_sdk', 'ent_user_sdk']
+  auth: {
+      clientId: 'asasdfasf',
+      clientSecret: 'aslfjasljf-=asdfalasjdf==asdfa',
+      technicalAccountId: 'asdfasdfas@techacct.adobe.com',
+      orgId: 'asdfasdfasdf@AdobeOrg',
+      metaScopes: ['ent_gdpr_sdk', 'ent_user_sdk']
+  }
 };
 ```
 
