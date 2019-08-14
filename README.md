@@ -18,7 +18,7 @@ Otherwise it works exactly as [fetch](https://github.com/bitinn/node-fetch)
 ### Installation
 
 ```
-npm install --save @adobe/PENDING
+npm install --save @adobe/fetch
 ```
 
 ### Common Usage
@@ -39,7 +39,7 @@ npm install --save @adobe/PENDING
     
     config.auth.privateKey = fs.readFileSync('private.key');
 
-    const adobefetch = require('@adobe/PENDING').config(config);
+    const adobefetch = require('@adobe/fetch').config(config);
 
     adobefetch("https://platform.adobe.io/some/adobe/api", { method: 'get'})
       .then(response => response.json())
