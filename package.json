@@ -1,0 +1,45 @@
+{
+  "name": "adobeio-fetch",
+  "version": "0.0.1",
+  "description": "Call Adobe APIs",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://git.corp.adobe.com/innovation-architecture/adobeio-fetch.git"
+  },
+  "bugs": {
+    "url": "https://git.corp.adobe.com/innovation-architecture/adobeio-fetch/issues"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "lint": "eslint src test sample index.js",
+    "run": "node index.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "jwt",
+    "api"
+  ],
+  "author": "Adobe Inc.",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@adobe/jwt-auth": "^0.2.0",
+    "deepmerge": "^4.0.0",
+    "dotenv": "^8.0.0",
+    "node-fetch": "^2.3.0",
+    "node-persist": "^3.0.5"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.1.0",
+    "prettier": "^1.18.2"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
+  }
+}
