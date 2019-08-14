@@ -14,7 +14,12 @@ node_js:
 
 install:
   - npm version
+  - npm install -g codecov
   - npm install
+
+after_success:
+  - codecov
+
 script:
   - npm test
 
@@ -22,3 +27,4 @@ script:
 branches:
   only:
     - master
+
