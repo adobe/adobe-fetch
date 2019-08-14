@@ -88,4 +88,21 @@ describe('Validate input', () => {
       })
     ).toThrow('Required parameter(s) privateKey are missing');
   });
+
+  test('privateKey is of wrong type', () => {
+    expect.assertions(1);
+    const privateKey = new Object();
+    return expect(() =>
+      adobefetch.config({
+        auth: {
+          clientId,
+          clientSecret,
+          technicalAccountId,
+          orgId,
+          metaScopes,
+          privateKey
+        }
+      })
+    ).toThrow('Required parameter privateKey is invalid');
+  });
 });
