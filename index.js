@@ -67,7 +67,7 @@ async function _fetch(url, options, configOptions, tokenCache, forceNewToken) {
  * @param url
  * @param options
  */
-function adobefetch(url, options = {}, configOptions, tokenCache) {
+function adobefetch(url, options, configOptions, tokenCache) {
   return _fetch(url, options, configOptions, tokenCache, false);
 }
 

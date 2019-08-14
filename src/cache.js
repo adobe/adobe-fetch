@@ -22,12 +22,9 @@ const EXPIRY_THRESHOLD = 60 * 1000;
  * @returns Promise
  */
 async function readCache(cache) {
-  if (cache.disableStorage) {
-    if (cache.tokens === undefined) {
-      cache.tokens = {};
-    }
-  } else {
-    cache.tokens = (await storage.read()) || {};
+  if (!cache.disableStorage) {
+    cache.tokens = await storage.read();
+    cache.readOnce = true;
   }
 }
 
@@ -76,8 +73,7 @@ function _validToken(key, cache) {
  */
 async function getToken(key, cache) {
   let cacheRead = false;
-  if (cache.tokens === undefined) {
-    cache.tokens = {};
+  if (!cache.readOnce) {
     await readCache(cache);
     cacheRead = true;
   }
@@ -92,9 +88,11 @@ async function getToken(key, cache) {
 }
 
 function config(options) {
+  const disableStorage = (options && options.disableStorage) || false;
   const cache = {
-    disableStorage: (options && options.disableStorage) || false,
-    tokens: undefined
+    disableStorage: disableStorage,
+    readOnce: disableStorage,
+    tokens: {}
   };
 
   return {
