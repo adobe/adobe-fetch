@@ -23,12 +23,10 @@ let storageInitialized = false;
  * @returns Promise
  * @private
  */
-async function _initStorage(options = {}) {
+async function _initStorage() {
   // Make sure init is only called once.
   if (!storagePromise) {
-    storagePromise = storage
-      .init(options)
-      .then(() => (storageInitialized = true));
+    storagePromise = storage.init().then(() => (storageInitialized = true));
   }
   return storagePromise;
 }
