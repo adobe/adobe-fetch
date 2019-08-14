@@ -147,6 +147,35 @@ describe('Validate auth behavior', () => {
     await testFetch(mockData.url);
   });
 
+  test('token not stored if storage disabled', async () => {
+    let setItemCalled = false;
+    let getItemCalled = false;
+    storage.getItem = jest.fn(() => {
+      getItemCalled = true;
+      return Promise.resolve({});
+    });
+    storage.setItem = jest.fn(() => {
+      setItemCalled = true;
+      return Promise.resolve();
+    });
+    testFetch = adobefetch.config({
+      auth: Object.assign({ disableStorage: true }, mockData.config)
+    });
+    await testFetch(mockData.url);
+    expect(setItemCalled).toBe(false);
+    expect(getItemCalled).toBe(false);
+  });
+
+  test('throws error if token is empty', () => {
+    expect.assertions(1);
+    const ERROR = 'Access token empty';
+    auth.mockImplementation(async () => undefined);
+    fetch.mockImplementation(() => {
+      return Promise.resolve({ status: 200 });
+    });
+    return expect(testFetch(mockData.url)).rejects.toEqual(ERROR);
+  });
+
   test('rethrows JWT errors', () => {
     expect.assertions(1);
     const ERROR = 'Some Error';

@@ -1,14 +1,14 @@
 {
-  "name": "adobeio-fetch",
-  "version": "0.0.1",
+  "name": "@adobe/fetch",
+  "version": "0.1.1",
   "description": "Call Adobe APIs",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://git.corp.adobe.com/innovation-architecture/adobeio-fetch.git"
+    "url": "https://github.com/adobe/adobe-fetch.git"
   },
   "bugs": {
-    "url": "https://git.corp.adobe.com/innovation-architecture/adobeio-fetch/issues"
+    "url": "https://github.com/adobe/adobe-fetch/issues"
   },
   "engines": {
     "node": ">=6.0.0"

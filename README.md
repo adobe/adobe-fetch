@@ -1,4 +1,10 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Greenkeeper badge](https://badges.greenkeeper.io/adobe/adobe-fetch.svg)](https://greenkeeper.io/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
+[![Version](https://img.shields.io/npm/v/@adobe/fetch.svg)](https://npmjs.org/package/@adobe/fetch)
+[![Downloads/week](https://img.shields.io/npm/dw/@adobe/fetch.svg)](https://npmjs.org/package/@adobe/fetch)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Build Status](https://travis-ci.com/adobe/adobe-fetch.svg?branch=master)](https://travis-ci.com/adobe/adobe-fetch)
+[![codecov](https://codecov.io/gh/adobe/adobe-fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/adobe-fetch)
+[![Greenkeeper badge](https://badges.greenkeeper.io/adobe/adobe-fetch.svg)](https://greenkeeper.io/)
 
 # adobeio-fetch
 
@@ -14,7 +20,7 @@ Otherwise it works exactly as [fetch](https://github.com/bitinn/node-fetch)
 ### Installation
 
 ```
-npm install --save @adobe/PENDING
+npm install --save @adobe/fetch
 ```
 
 ### Common Usage
@@ -35,7 +41,7 @@ npm install --save @adobe/PENDING
     
     config.auth.privateKey = fs.readFileSync('private.key');
 
-    const adobefetch = require('@adobe/PENDING').config(config);
+    const adobefetch = require('@adobe/fetch').config(config);
 
     adobefetch("https://platform.adobe.io/some/adobe/api", { method: 'get'})
       .then(response => response.json())
@@ -69,14 +75,16 @@ They you would create an array of **metaScopes** as part of the config object. F
 
 ```javascript
 const config = {
-  clientId: 'asasdfasf',
-  clientSecret: 'aslfjasljf-=asdfalasjdf==asdfa',
-  technicalAccountId: 'asdfasdfas@techacct.adobe.com',
-  orgId: 'asdfasdfasdf@AdobeOrg',
-  metaScopes: [
-    'https://ims-na1.adobelogin.com/s/ent_gdpr_sdk',
-    'https://ims-na1.adobelogin.com/s/ent_user_sdk'
-  ]
+  auth: {
+      clientId: 'asasdfasf',
+      clientSecret: 'aslfjasljf-=asdfalasjdf==asdfa',
+      technicalAccountId: 'asdfasdfas@techacct.adobe.com',
+      orgId: 'asdfasdfasdf@AdobeOrg',
+      metaScopes: [
+        'https://ims-na1.adobelogin.com/s/ent_gdpr_sdk',
+        'https://ims-na1.adobelogin.com/s/ent_user_sdk'
+      ]
+  }
 };
 ```
 
@@ -84,11 +92,13 @@ However, if you omit the IMS url the package will automatically add it for you w
 
 ```javascript
 const config = {
-  clientId: 'asasdfasf',
-  clientSecret: 'aslfjasljf-=asdfalasjdf==asdfa',
-  technicalAccountId: 'asdfasdfas@techacct.adobe.com',
-  orgId: 'asdfasdfasdf@AdobeOrg',
-  metaScopes: ['ent_gdpr_sdk', 'ent_user_sdk']
+  auth: {
+      clientId: 'asasdfasf',
+      clientSecret: 'aslfjasljf-=asdfalasjdf==asdfa',
+      technicalAccountId: 'asdfasdfas@techacct.adobe.com',
+      orgId: 'asdfasdfasdf@AdobeOrg',
+      metaScopes: ['ent_gdpr_sdk', 'ent_user_sdk']
+  }
 };
 ```
 

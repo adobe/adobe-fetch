@@ -12,6 +12,21 @@ governing permissions and limitations under the License.
 
 require('dotenv').config();
 
+/*
+
+GET sample: To use this sample, create an environment (.env) file with the following information:
+
+APIKEY=<Client ID>
+SECRET=<Client Secret>
+ACCOUNT_ID=<Technical Account ID>
+ORG_IG=<IMS Org>
+META_SCOPES=<Comma separated scopes list>
+PRIVATE_KEY=<Private key. Use \n for line delimiters>
+SAMPLE_URL=<API URL>
+
+Alternatively, change the code below to use fs.readFileSync to read the private key from a file.
+ */
+
 async function main() {
   const adobefetch = require('../index.js').config({
     auth: {
@@ -20,7 +35,7 @@ async function main() {
       technicalAccountId: process.env.ACCOUNT_ID,
       orgId: process.env.ORG_ID,
       metaScopes: process.env.META_SCOPES.split(','),
-      privateKey: process.env.PRIVATE_KEY
+      privateKey: process.env.PRIVATE_KEY // Alternative: require('fs').readFileSync('path/to/key')
     }
   });
 
