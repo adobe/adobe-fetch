@@ -20,7 +20,10 @@
   },
   "keywords": [
     "jwt",
-    "api"
+    "api",
+    "fetch",
+    "adobe",
+    "adobeio"
   ],
   "author": "Adobe Inc.",
   "license": "Apache-2.0",
