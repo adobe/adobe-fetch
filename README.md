@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/adobe/adobe-fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/adobe-fetch)
 [![Greenkeeper badge](https://badges.greenkeeper.io/adobe/adobe-fetch.svg)](https://greenkeeper.io/)
 
-# adobeio-fetch
+# adobe-fetch
 
 Call Adobe APIs
 
