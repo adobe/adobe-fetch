@@ -23,7 +23,7 @@ const EXPIRY_THRESHOLD = 60 * 1000;
  */
 async function readCache(cache) {
   if (!cache.disableStorage) {
-    cache.tokens = await storage.read();
+    cache.tokens = await cache.read();
     cache.readOnce = true;
   }
 }
@@ -35,7 +35,7 @@ async function readCache(cache) {
  */
 async function saveCache(cache) {
   if (!cache.disableStorage) {
-    await storage.save(cache.tokens);
+    await cache.write(cache.tokens);
   }
 }
 
@@ -89,9 +89,14 @@ async function getToken(key, cache) {
 
 function config(options) {
   const disableStorage = (options && options.disableStorage) || false;
+  const readFunc = options.storage ? options.storage.read : storage.read;
+  const writeFunc = options.storage ? options.storage.write : storage.write;
+
   const cache = {
     disableStorage: disableStorage,
     readOnce: disableStorage,
+    read: readFunc,
+    write: writeFunc,
     tokens: {}
   };
 

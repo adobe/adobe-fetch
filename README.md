@@ -62,14 +62,14 @@ The config object is where you pass in all the required and optional parameters 
 | privateKey         |                      | true     | String                            |                                |
 | passphrase         |                      | false    | String                            |                                |
 | metaScopes         |                      | true     | Comma separated Sting or an Array |                                |
-| ims                |                      | false    | String                            | https://ims-na1.adobelogin.com |
+| ims                |                      | false    | String                            | <https://ims-na1.adobelogin.com> |
 
 In order to determine which **metaScopes** you need to register for you can look them up by product in this [handy table](https://www.adobe.io/authentication/auth-methods.html#!AdobeDocs/adobeio-auth/master/JWT/Scopes.md).
 
 For instance if you need to be authenticated to call API's for both GDPR and User Management you would [look them up](https://www.adobe.io/authentication/auth-methods.html#!AdobeDocs/adobeio-auth/master/JWT/Scopes.md) and find that they are:
 
-- GDPR: https://ims-na1.adobelogin.com/s/ent_gdpr_sdk
-- User Management: https://ims-na1.adobelogin.com/s/ent_user_sdk
+- GDPR: <https://ims-na1.adobelogin.com/s/ent_gdpr_sdk>
+- User Management: <https://ims-na1.adobelogin.com/s/ent_user_sdk>
 
 They you would create an array of **metaScopes** as part of the config object. For instance:
 
@@ -103,6 +103,64 @@ const config = {
 ```
 
 This is the recommended approach.
+
+#### Custom Storage
+
+By default, [node-persist](https://github.com/bitinn/node-persist) is used to store all the active tokens locally.  
+Tokens will be stored under **/.node-perist/storage**
+
+It is possible to use any other storage for token persistance. This is done by providing **read** and **write** methods as follows:  
+
+```javascript
+const config = {
+  auth: {
+      clientId: 'asasdfasf',
+      
+      ...
+      
+      storage: {
+        read: function() {
+          return new Promise(function(resolve, reject) {
+            let tokens;
+            
+            // .. Some logic to read the tokens ..
+            
+            resolve(tokens);
+          });
+        },
+        write: function(tokens) {
+          return new Promise(function(resolve, reject) {
+            
+            // .. Some logic to save the tokens ..
+            
+            resolve();
+          });
+        }
+      }
+  }
+};
+```
+
+Alternatively, use async/await:
+
+```javascript
+const config = {
+  auth: {
+      clientId: 'asasdfasf',
+      
+      ...
+      
+      storage: {
+        read: async function() {
+          return await myGetTokensImplementation();            
+        },
+        write: async function(tokens) {
+          await myStoreTokensImplementation(tokens);
+        }
+      }
+  }
+};
+```
 
 ### Contributing
 
