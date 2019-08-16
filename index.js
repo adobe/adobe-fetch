@@ -78,7 +78,8 @@ function verifyConfig(options) {
     orgId,
     clientSecret,
     privateKey,
-    metaScopes
+    metaScopes,
+    storage
   } = options;
 
   const errors = [];
@@ -101,6 +102,15 @@ function verifyConfig(options) {
     )
   ) {
     throw 'Required parameter privateKey is invalid';
+  }
+
+  if (storage) {
+    let { read, write } = storage;
+    if (!read) {
+      throw 'Storage read method missing!';
+    } else if (!write) {
+      throw 'Storage write method missing!';
+    }
   }
 }
 
