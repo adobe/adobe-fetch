@@ -49,9 +49,9 @@ async function read() {
  * @param tokens
  * @returns {*}
  */
-async function save(tokens) {
+async function write(tokens) {
   return await storage.setItem(TOKENS, tokens);
 }
 
 module.exports.read = read;
-module.exports.save = save;
+module.exports.write = write;
