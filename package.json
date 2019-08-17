@@ -1,6 +1,6 @@
 {
   "name": "@adobe/fetch",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Call Adobe APIs",
   "main": "index.js",
   "repository": {

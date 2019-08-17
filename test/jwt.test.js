@@ -28,7 +28,7 @@ describe('Validate auth behavior', () => {
   beforeEach(() => {
     // Default node-persist init/get/set - Do nothing
     storage.init.mockImplementation(() => Promise.resolve());
-    storage.getItem = jest.fn(() => Promise.resolve({}));
+    storage.getItem = jest.fn(() => Promise.resolve(undefined));
     storage.setItem = jest.fn(() => Promise.resolve());
 
     // Default auth - Return default token.
