@@ -138,6 +138,22 @@ describe('Validate auth behavior', () => {
     await testFetch(mockData.url);
   });
 
+  test('allows x-api-key override', async () => {
+    expect.assertions(4);
+    fetch.mockImplementation((url, options) => {
+      expect(options.headers).toBeDefined();
+      expect(options.headers['authorization']).toBe(
+        `${mockData.token2.token_type} ${mockData.token.access_token}`
+      );
+      expect(options.headers['x-api-key']).toBe('test-override');
+      expect(options.headers['x-gw-ims-org-id']).toBe(mockData.config.orgId);
+      return Promise.resolve({ status: 200, url: url });
+    });
+    await testFetch(mockData.url, {
+      headers: { 'x-api-key': 'test-override' }
+    });
+  });
+
   test('token stored in default storage', async () => {
     expect.assertions(6);
     storage.setItem = jest.fn((key, value) => {
