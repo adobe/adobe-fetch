@@ -23,7 +23,7 @@ const EXPIRY_THRESHOLD = 60 * 1000;
  */
 async function readCache(cache) {
   if (!cache.disableStorage) {
-    cache.tokens = await cache.read() || {};
+    cache.tokens = (await cache.read()) || {};
     cache.readOnce = true;
   }
 }

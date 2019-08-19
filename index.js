@@ -39,10 +39,16 @@ async function getToken(authOptions, tokenCache, forceNewToken) {
 }
 
 function addAuthHeaders(token, options, authOptions) {
+  let apiKey = authOptions.clientId;
+
+  if (options.headers && options.headers['x-api-key']) {
+    apiKey = options.headers['x-api-key'];
+  }
+
   return merge(options, {
     headers: {
       authorization: `${token.token_type} ${token.access_token}`,
-      'x-api-key': authOptions.clientId,
+      'x-api-key': apiKey,
       'x-gw-ims-org-id': authOptions.orgId
     }
   });
