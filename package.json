@@ -1,6 +1,6 @@
 {
   "name": "@adobe/fetch",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Call Adobe APIs",
   "main": "index.js",
   "repository": {
@@ -29,16 +29,18 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@adobe/jwt-auth": "^0.2.0",
+    "debug": "^4.1.1",
     "deepmerge": "^4.0.0",
-    "dotenv": "^8.0.0",
+    "dotenv": "^8.1.0",
     "node-fetch": "^2.3.0",
-    "node-persist": "^3.0.5"
+    "node-persist": "^3.0.5",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "eslint": "^6.1.0",
-    "eslint-config-prettier": "^6.0.0",
+    "eslint": "^6.2.1",
+    "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "jest": "^24.1.0",
+    "jest": "^24.9.0",
     "prettier": "^1.18.2"
   },
   "jest": {

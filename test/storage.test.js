@@ -76,7 +76,7 @@ describe('Validate custom storage', () => {
       expect(options.headers['authorization']).toBe(
         `${token.token_type} ${token.access_token}`
       );
-      return Promise.resolve({ status: 200 });
+      return Promise.resolve(mockData.responseOK);
     });
     await adobefetch.config({
       auth: authConfig
@@ -104,7 +104,7 @@ describe('Validate custom storage', () => {
       expect(options.headers['authorization']).toBe(
         `${token.token_type} ${token.access_token}`
       );
-      return Promise.resolve({ status: 200 });
+      return Promise.resolve(mockData.responseOK);
     });
     await adobefetch.config({
       auth: authConfig
@@ -117,7 +117,7 @@ describe('Validate custom storage', () => {
 
     auth.mockImplementation(() => Promise.resolve(mockData.token));
     fetch.mockImplementation(() => {
-      return Promise.resolve({ status: 200 });
+      return Promise.resolve(mockData.responseOK);
     });
 
     const authConfig = Object.assign(
@@ -147,7 +147,7 @@ describe('Validate custom storage', () => {
 
     auth.mockImplementation(() => Promise.resolve(mockData.token));
     fetch.mockImplementation(() => {
-      return Promise.resolve({ status: 200 });
+      return Promise.resolve(mockData.responseOK);
     });
 
     const authConfig = Object.assign(
