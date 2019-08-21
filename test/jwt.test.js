@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const auth = require('@adobe/jwt-auth');
+const uuid = require('uuid/v4');
 const storage = require('node-persist');
 const fetch = require('node-fetch');
 const mockData = require('./mockData');
@@ -24,6 +25,15 @@ jest.mock('@adobe/jwt-auth');
 jest.mock('node-persist');
 jest.mock('node-fetch');
 
+function expectHeaders(url, options, access_token, apikey, orgid) {
+  expect(options.headers).toBeDefined();
+  expect(options.headers['authorization']).toBe(`bearer ${access_token}`);
+  expect(options.headers['x-api-key']).toBe(apikey);
+  expect(options.headers['x-gw-ims-org-id']).toBe(orgid);
+  expect(options.headers['x-request-id']).toHaveLength(32);
+  return Promise.resolve(mockData.responseOK);
+}
+
 describe('Validate auth behavior', () => {
   beforeEach(() => {
     // Default node-persist init/get/set - Do nothing
@@ -35,27 +45,27 @@ describe('Validate auth behavior', () => {
     auth.mockImplementation(() => Promise.resolve(mockData.token));
 
     // Default fetch mock - Returns status 200 and expects the auth headers.
-    fetch.mockImplementation((url, options) => {
-      expect(options.headers).toBeDefined();
-      expect(options.headers['authorization']).toBe(
-        `${mockData.token.token_type} ${mockData.token.access_token}`
-      );
-      expect(options.headers['x-api-key']).toBe(mockData.config.clientId);
-      expect(options.headers['x-gw-ims-org-id']).toBe(mockData.config.orgId);
-      return Promise.resolve({ status: 200, url: url });
-    });
+    fetch.mockImplementation((url, options) =>
+      expectHeaders(
+        url,
+        options,
+        mockData.token.access_token,
+        mockData.config.clientId,
+        mockData.config.orgId
+      )
+    );
 
     // New adobe fetch object.
     testFetch = adobefetch.config({ auth: mockData.config });
   });
 
   test('adds authentication headers', () => {
-    expect.assertions(4);
+    expect.assertions(5);
     return testFetch(mockData.url);
   });
 
   test('caches access token', async () => {
-    expect.assertions(9);
+    expect.assertions(11);
     await testFetch(mockData.url);
     let authCalled = false;
     auth.mockImplementation(() => {
@@ -68,25 +78,25 @@ describe('Validate auth behavior', () => {
   });
 
   test('get stored token if valid', async () => {
-    expect.assertions(4);
+    expect.assertions(5);
     const token = mockData.valid_token[mockData.token_key];
     storage.getItem = jest.fn(() => {
       return Promise.resolve(mockData.valid_token);
     });
-    fetch.mockImplementation((url, options) => {
-      expect(options.headers).toBeDefined();
-      expect(options.headers['authorization']).toBe(
-        `${token.token_type} ${token.access_token}`
-      );
-      expect(options.headers['x-api-key']).toBe(mockData.config.clientId);
-      expect(options.headers['x-gw-ims-org-id']).toBe(mockData.config.orgId);
-      return Promise.resolve({ status: 200 });
-    });
+    fetch.mockImplementation((url, options) =>
+      expectHeaders(
+        url,
+        options,
+        token.access_token,
+        mockData.config.clientId,
+        mockData.config.orgId
+      )
+    );
     await testFetch(mockData.url);
   });
 
   test('get new token when cached expires', async () => {
-    expect.assertions(6);
+    expect.assertions(7);
     storage.getItem = jest.fn(key => {
       expect(key).toBe(TOKENS_KEY);
       return Promise.resolve(mockData.expiring_token);
@@ -95,67 +105,82 @@ describe('Validate auth behavior', () => {
   });
 
   test('get new token when fetch returns 401', async () => {
-    expect.assertions(4);
+    expect.assertions(5);
     fetch.mockImplementation(() => {
       auth.mockImplementation(() => {
-        fetch.mockImplementation((url, options) => {
-          expect(options.headers).toBeDefined();
-          expect(options.headers['authorization']).toBe(
-            `${mockData.token2.token_type} ${mockData.token2.access_token}`
-          );
-          expect(options.headers['x-api-key']).toBe(mockData.config.clientId);
-          expect(options.headers['x-gw-ims-org-id']).toBe(
+        fetch.mockImplementation((url, options) =>
+          expectHeaders(
+            url,
+            options,
+            mockData.token2.access_token,
+            mockData.config.clientId,
             mockData.config.orgId
-          );
-          return Promise.resolve({ status: 200 });
-        });
+          )
+        );
         return Promise.resolve(mockData.token2);
       });
-      return Promise.resolve({ status: 401 });
+      return Promise.resolve(mockData.responseUnauthorized);
     });
     await testFetch(mockData.url);
   });
 
   test('get new token when fetch returns 403', async () => {
-    expect.assertions(4);
-    fetch.mockImplementation(url => {
+    expect.assertions(5);
+    fetch.mockImplementation(() => {
       auth.mockImplementation(() => {
-        fetch.mockImplementation((url, options) => {
-          expect(options.headers).toBeDefined();
-          expect(options.headers['authorization']).toBe(
-            `${mockData.token2.token_type} ${mockData.token2.access_token}`
-          );
-          expect(options.headers['x-api-key']).toBe(mockData.config.clientId);
-          expect(options.headers['x-gw-ims-org-id']).toBe(
+        fetch.mockImplementation((url, options) =>
+          expectHeaders(
+            url,
+            options,
+            mockData.token2.access_token,
+            mockData.config.clientId,
             mockData.config.orgId
-          );
-          return Promise.resolve({ status: 200, url: url });
-        });
+          )
+        );
         return Promise.resolve(mockData.token2);
       });
-      return Promise.resolve({ status: 403, url: url });
+      return Promise.resolve(mockData.responseForbidden);
     });
     await testFetch(mockData.url);
   });
 
   test('allows x-api-key override', async () => {
-    expect.assertions(4);
-    fetch.mockImplementation((url, options) => {
-      expect(options.headers).toBeDefined();
-      expect(options.headers['authorization']).toBe(
-        `${mockData.token2.token_type} ${mockData.token.access_token}`
-      );
-      expect(options.headers['x-api-key']).toBe('test-override');
-      expect(options.headers['x-gw-ims-org-id']).toBe(mockData.config.orgId);
-      return Promise.resolve({ status: 200, url: url });
-    });
+    expect.assertions(5);
+    fetch.mockImplementation((url, options) =>
+      expectHeaders(
+        url,
+        options,
+        mockData.token.access_token,
+        'test-override',
+        mockData.config.orgId
+      )
+    );
     await testFetch(mockData.url, {
       headers: { 'x-api-key': 'test-override' }
     });
   });
 
-  test('token stored in default storage', async () => {
+  test('allows x-request-id override', async () => {
     expect.assertions(6);
+    const xrequestid = uuid().replace(/-/g, '');
+
+    fetch.mockImplementation((url, options) => {
+      expect(options.headers['x-request-id']).toBe(xrequestid);
+      return expectHeaders(
+        url,
+        options,
+        mockData.token.access_token,
+        mockData.config.clientId,
+        mockData.config.orgId
+      );
+    });
+    await testFetch(mockData.url, {
+      headers: { 'x-request-id': xrequestid }
+    });
+  });
+
+  test('token stored in default storage', async () => {
+    expect.assertions(7);
     storage.setItem = jest.fn((key, value) => {
       expect(key).toBe(TOKENS_KEY);
       expect(value).toStrictEqual({ [mockData.token_key]: mockData.token });
@@ -187,7 +212,7 @@ describe('Validate auth behavior', () => {
     const ERROR = 'Access token empty';
     auth.mockImplementation(async () => undefined);
     fetch.mockImplementation(() => {
-      return Promise.resolve({ status: 200 });
+      return Promise.resolve(mockData.responseOK);
     });
     return expect(testFetch(mockData.url)).rejects.toEqual(ERROR);
   });
@@ -198,9 +223,7 @@ describe('Validate auth behavior', () => {
     auth.mockImplementation(async () => {
       throw ERROR;
     });
-    fetch.mockImplementation(() => {
-      return Promise.resolve({ status: 200 });
-    });
+    fetch.mockImplementation(() => Promise.resolve(mockData.responseOK));
     return expect(testFetch(mockData.url)).rejects.toEqual(ERROR);
   });
 });

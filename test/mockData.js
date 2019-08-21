@@ -18,8 +18,27 @@ const PRIVATE_KEY = 'aalsdjfajsldjfalsjkdfa ,lsjf ,aljs';
 const IMS = 'https://ims-na1.adobelogin.com';
 const SCOPES = ['ent_dataservices_sdk'];
 const TOKEN_KEY = `${CLIENT_ID}|${SCOPES.join(',')}`;
+const MOCK_URL = 'https://mock.com/mock';
 
 module.exports = {
+  responseOK: {
+    url: MOCK_URL,
+    status: 200,
+    statusText: 'OK',
+    ok: true
+  },
+  responseForbidden: {
+    url: MOCK_URL,
+    status: 403,
+    statusText: 'Forbidden',
+    ok: false
+  },
+  responseUnauthorized: {
+    url: MOCK_URL,
+    status: 401,
+    statusText: 'Unauthorized',
+    ok: false
+  },
   config: {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
@@ -56,5 +75,5 @@ module.exports = {
       expires_at: Date.now() - 100000
     }
   },
-  url: 'https://mock.com/mock'
+  url: MOCK_URL
 };

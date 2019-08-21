@@ -162,6 +162,21 @@ const config = {
 };
 ```
 
+## Logging
+
+Every request will include a unique request identifier sent via the **x-request-id**.   
+The request identifier can be overriden by providing it through the headers:
+```javascript
+fetch(url, {
+  headers: { 'x-request-id': myRequestID }
+});
+```
+
+We use [debug](https://github.com/visionmedia/debug) to log requests.   In order to see all the debug output, including the request identifiers, run your app with **DEBUG** environment variable including the **@adobe/fetch** scope as follows:
+```
+DEBUG=@adobe/fetch
+```
+
 ### Contributing
 
 Contributions are welcomed! Read the [Contributing Guide](.github/CONTRIBUTING.MD) for more information.

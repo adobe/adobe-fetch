@@ -12,8 +12,10 @@ governing permissions and limitations under the License.
 
 const fetch = require('node-fetch');
 const cache = require('./src/cache');
+const uuid = require('uuid/v4');
 const auth = require('@adobe/jwt-auth');
 const merge = require('deepmerge');
+const debug = require('debug')('@adobe/fetch');
 const NO_CONFIG = 'Auth configuration missing.';
 
 async function getToken(authOptions, tokenCache, forceNewToken) {
@@ -40,15 +42,22 @@ async function getToken(authOptions, tokenCache, forceNewToken) {
 
 function addAuthHeaders(token, options, authOptions) {
   let apiKey = authOptions.clientId;
+  let xrequestid = uuid().replace(/-/g, '');
 
-  if (options.headers && options.headers['x-api-key']) {
-    apiKey = options.headers['x-api-key'];
+  if (options.headers) {
+    if (options.headers['x-api-key']) {
+      apiKey = options.headers['x-api-key'];
+    }
+    if (options.headers['x-request-id']) {
+      xrequestid = options.headers['x-request-id'];
+    }
   }
 
   return merge(options, {
     headers: {
       authorization: `${token.token_type} ${token.access_token}`,
       'x-api-key': apiKey,
+      'x-request-id': xrequestid,
       'x-gw-ims-org-id': authOptions.orgId
     }
   });
@@ -57,13 +66,26 @@ function addAuthHeaders(token, options, authOptions) {
 async function _fetch(url, options, configOptions, tokenCache, forceNewToken) {
   const token = await getToken(configOptions.auth, tokenCache, forceNewToken);
   const opts = addAuthHeaders(token, options, configOptions.auth);
+
+  debug(
+    `${opts.method || 'GET'} ${url} - x-request-id: ${
+      opts.headers['x-request-id']
+    }`
+  );
   const res = await fetch(url, opts);
 
-  if ((res.status === 401 || res.status === 403) && !forceNewToken) {
-    return await _fetch(url, options, configOptions, tokenCache, true);
-  } else {
-    return res;
+  if (!res.ok) {
+    debug(
+      `${opts.method || 'GET'} ${url} - status ${res.statusText} (${
+        res.status
+      }). x-request-id: ${opts.headers['x-request-id']}`
+    );
+    if ((res.status === 401 || res.status === 403) && !forceNewToken) {
+      debug(`${opts.method || 'GET'} ${url} - Will get new token.`);
+      return await _fetch(url, options, configOptions, tokenCache, true);
+    }
   }
+  return res;
 }
 
 /**
