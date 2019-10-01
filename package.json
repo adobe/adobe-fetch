@@ -28,7 +28,7 @@
   "author": "Adobe Inc.",
   "license": "Apache-2.0",
   "dependencies": {
-    "@adobe/jwt-auth": "^0.2.0",
+    "@adobe/jwt-auth": "^0.3.0",
     "debug": "^4.1.1",
     "deepmerge": "^4.0.0",
     "dotenv": "^8.1.0",
