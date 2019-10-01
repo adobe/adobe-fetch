@@ -1,6 +1,6 @@
 {
   "name": "@adobe/fetch",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Call Adobe APIs",
   "main": "index.js",
   "repository": {
@@ -27,6 +27,9 @@
   ],
   "author": "Adobe Inc.",
   "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "dependencies": {
     "@adobe/jwt-auth": "^0.3.0",
     "debug": "^4.1.1",
