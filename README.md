@@ -51,7 +51,7 @@ npm install --save @adobe/fetch
 
 #### Config object
 
-The config object is where you pass in all the required and optional parameters to authenticate API calls.
+The `config` object is where you pass in all the required and optional parameters to authenticate API calls.
 
 | parameter          | integration name     | required | type                              | default                        |
 | ------------------ | -------------------- | -------- | --------------------------------- | ------------------------------ |
@@ -66,12 +66,12 @@ The config object is where you pass in all the required and optional parameters 
 
 In order to determine which **metaScopes** you need to register for you can look them up by product in this [handy table](https://www.adobe.io/authentication/auth-methods.html#!AdobeDocs/adobeio-auth/master/JWT/Scopes.md).
 
-For instance if you need to be authenticated to call API's for both GDPR and User Management you would [look them up](https://www.adobe.io/authentication/auth-methods.html#!AdobeDocs/adobeio-auth/master/JWT/Scopes.md) and find that they are:
+For instance, if you need to be authenticated to call API's for both GDPR and User Management you would [look them up](https://www.adobe.io/authentication/auth-methods.html#!AdobeDocs/adobeio-auth/master/JWT/Scopes.md) and find that they are:
 
 - GDPR: <https://ims-na1.adobelogin.com/s/ent_gdpr_sdk>
 - User Management: <https://ims-na1.adobelogin.com/s/ent_user_sdk>
 
-They you would create an array of **metaScopes** as part of the config object. For instance:
+Then you would create an array of **metaScopes** as part of the `config` object. For instance:
 
 ```javascript
 const config = {
@@ -88,7 +88,9 @@ const config = {
 };
 ```
 
-However, if you omit the IMS url the package will automatically add it for you when making the call to generate the JWT. For example:
+However, if you omit the IMS URL, the package will automatically add it for you when making the call to generate the JWT. 
+
+For example:
 
 ```javascript
 const config = {
@@ -109,7 +111,7 @@ This is the recommended approach.
 By default, [node-persist](https://github.com/bitinn/node-persist) is used to store all the active tokens locally.  
 Tokens will be stored under **/.node-perist/storage**
 
-It is possible to use any other storage for token persistance. This is done by providing **read** and **write** methods as follows:  
+It is possible to use any other storage for token persistence. This is done by providing **read** and **write** methods as follows:  
 
 ```javascript
 const config = {
@@ -172,7 +174,7 @@ fetch(url, {
 });
 ```
 
-We use [debug](https://github.com/visionmedia/debug) to log requests.   In order to see all the debug output, including the request identifiers, run your app with **DEBUG** environment variable including the **@adobe/fetch** scope as follows:
+We use [debug](https://github.com/visionmedia/debug) to log requests. In order to see all the debug output, including the request identifiers, run your app with the **DEBUG** environment variable including the **@adobe/fetch** scope as follows:
 ```
 DEBUG=@adobe/fetch
 ```
