@@ -108,7 +108,7 @@ This is the recommended approach.
 
 #### Custom Storage
 
-By default, [node-persist](https://github.com/bitinn/node-persist) is used to store all the active tokens locally.  
+By default, [node-persist](https://github.com/simonlast/node-persist) is used to store all the active tokens locally.  
 Tokens will be stored under **/.node-perist/storage**
 
 It is possible to use any other storage for token persistence. This is done by providing **read** and **write** methods as follows:  
@@ -181,7 +181,7 @@ DEBUG=@adobe/fetch
 
 ### Contributing
 
-Contributions are welcomed! Read the [Contributing Guide](.github/CONTRIBUTING.MD) for more information.
+Contributions are welcomed! Read the [Contributing Guide](.github/CONTRIBUTING.md) for more information.
 
 ### Licensing
 
