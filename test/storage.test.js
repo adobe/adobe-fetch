@@ -74,7 +74,7 @@ describe('Validate custom storage', () => {
     fetch.mockImplementation((url, options) => {
       expect(options.headers).toBeDefined();
       expect(options.headers['authorization']).toBe(
-        `${token.token_type} ${token.access_token}`
+        `Bearer ${token.access_token}`
       );
       return Promise.resolve(mockData.responseOK);
     });
@@ -102,7 +102,7 @@ describe('Validate custom storage', () => {
     fetch.mockImplementation((url, options) => {
       expect(options.headers).toBeDefined();
       expect(options.headers['authorization']).toBe(
-        `${token.token_type} ${token.access_token}`
+        `Bearer ${token.access_token}`
       );
       return Promise.resolve(mockData.responseOK);
     });

@@ -27,7 +27,7 @@ jest.mock('node-fetch');
 
 function expectHeaders(url, options, access_token, apikey, orgid) {
   expect(options.headers).toBeDefined();
-  expect(options.headers['authorization']).toBe(`bearer ${access_token}`);
+  expect(options.headers['authorization']).toBe(`Bearer ${access_token}`);
   expect(options.headers['x-api-key']).toBe(apikey);
   expect(options.headers['x-gw-ims-org-id']).toBe(orgid);
   expect(options.headers['x-request-id']).toHaveLength(32);

@@ -40,7 +40,12 @@ async function getToken(authOptions, tokenCache, forceNewToken) {
   }
 }
 
+function capFirst(s) {
+  return s[0].toUpperCase() + s.slice(1);
+}
+
 function addAuthHeaders(token, options, authOptions) {
+  const tokenType = capFirst(token.token_type);
   let apiKey = authOptions.clientId;
   let xrequestid = uuid().replace(/-/g, '');
 
@@ -55,7 +60,7 @@ function addAuthHeaders(token, options, authOptions) {
 
   return merge(options, {
     headers: {
-      authorization: `${token.token_type} ${token.access_token}`,
+      authorization: `${tokenType} ${token.access_token}`,
       'x-api-key': apiKey,
       'x-request-id': xrequestid,
       'x-gw-ims-org-id': authOptions.orgId
