@@ -41,6 +41,7 @@ async function getToken(authOptions, tokenCache, forceNewToken) {
 }
 
 function addAuthHeaders(token, options, authOptions) {
+  const tokenType = token.token_type.charAt(0).toUpperCase() + token.token_type.substring(1); 
   let apiKey = authOptions.clientId;
   let xrequestid = uuid().replace(/-/g, '');
 
@@ -55,7 +56,7 @@ function addAuthHeaders(token, options, authOptions) {
 
   return merge(options, {
     headers: {
-      authorization: `${token.token_type} ${token.access_token}`,
+      authorization: `${tokenType} ${token.access_token}`,
       'x-api-key': apiKey,
       'x-request-id': xrequestid,
       'x-gw-ims-org-id': authOptions.orgId
