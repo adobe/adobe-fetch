@@ -40,8 +40,12 @@ async function getToken(authOptions, tokenCache, forceNewToken) {
   }
 }
 
+function capFirst(s) {
+  return s[0].toUpperCase() + s.slice(1);
+}
+
 function addAuthHeaders(token, options, authOptions) {
-  const tokenType = token.token_type.charAt(0).toUpperCase() + token.token_type.substring(1); 
+  const tokenType = capFirst(token.token_type);
   let apiKey = authOptions.clientId;
   let xrequestid = uuid().replace(/-/g, '');
 

@@ -61,7 +61,7 @@ module.exports = {
   },
   valid_token: {
     [TOKEN_KEY]: {
-      token_type: 'Bearer',
+      token_type: 'bearer',
       access_token: 'abcabc',
       expires_in: 86399956,
       expires_at: Date.now() + 100000
