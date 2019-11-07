@@ -128,9 +128,10 @@ const config = {
 };
 ```
 
-The following headers are added automatically. You can override all of them except **authorization**: 
+The following headers are added automatically.
+You can override these headers using a value or function as shown above, with the exception of **authorization**: 
 
-- authorization
+- authorization **(Can not be overridden)**
 - x-api-key
 - x-request-id
 - x-gw-ims-org-id
