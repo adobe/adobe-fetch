@@ -47,54 +47,69 @@ function generateRequestID() {
   return uuid().replace(/-/g, '');
 }
 
-function addHeaders(token, options, predefinedHeaders) {
-  let headers = {};
-
-  for (let name in predefinedHeaders) {
-    const value = predefinedHeaders[name];
-    headers[name.toLowerCase()] = typeof value === 'function' ? value() : value;
-  }
-
-  if (options.headers) {
-    if (typeof options.headers.entries === 'function') {
+function normalizeHeaders(headers) {
+  let normalized = {};
+  if (headers) {
+    if (typeof headers.entries === 'function') {
       // This is a headers object, iterate with for..of.
-      for (let pair of options.headers.entries()) {
+      for (let pair of headers.entries()) {
         const [name, value] = pair;
-        headers[name.toLowerCase()] = value;
+        normalized[name.toLowerCase()] = value;
       }
     } else {
       // This is a normal JSON. Iterate with for.. in
-      for (let name in options.headers) {
-        headers[name.toLowerCase()] = options.headers[name];
+      for (let name in headers) {
+        normalized[name.toLowerCase()] = headers[name];
       }
     }
   }
-
-  headers.authorization = `${capFirst(token.token_type)} ${token.access_token}`;
-  options.headers = headers;
-  return options;
+  return normalized;
 }
 
-async function _fetch(url, options, configOptions, tokenCache, forceNewToken) {
+function calculateHeaders(predefinedHeaders) {
+  let headers = {};
+  for (let name in predefinedHeaders) {
+    const value = predefinedHeaders[name];
+    if (typeof value === 'function') {
+      headers[name] = value();
+    } else {
+      headers[name] = value;
+    }
+  }
+  return headers;
+}
+
+function getHeaders(token, options, predefinedHeaders) {
+  let headers = calculateHeaders(predefinedHeaders);
+  if (options && options.headers) {
+    headers = Object.assign(headers, normalizeHeaders(options.headers));
+  }
+
+  headers.authorization = `${capFirst(token.token_type)} ${token.access_token}`;
+  return headers;
+}
+
+async function _fetch(url, opts, configOptions, tokenCache, forceNewToken) {
   const token = await getToken(configOptions.auth, tokenCache, forceNewToken);
-  const opts = addHeaders(token, options, configOptions.headers);
+  const fetchOpts = Object.assign({}, opts);
+  fetchOpts.headers = getHeaders(token, opts, configOptions.headers);
 
   debug(
-    `${opts.method || 'GET'} ${url} - x-request-id: ${
-      opts.headers['x-request-id']
+    `${fetchOpts.method || 'GET'} ${url} - x-request-id: ${
+      fetchOpts.headers['x-request-id']
     }`
   );
-  const res = await fetch(url, opts);
+  const res = await fetch(url, fetchOpts);
 
   if (!res.ok) {
     debug(
-      `${opts.method || 'GET'} ${url} - status ${res.statusText} (${
+      `${fetchOpts.method || 'GET'} ${url} - status ${res.statusText} (${
         res.status
-      }). x-request-id: ${opts.headers['x-request-id']}`
+      }). x-request-id: ${fetchOpts.headers['x-request-id']}`
     );
     if ((res.status === 401 || res.status === 403) && !forceNewToken) {
       debug(`${opts.method || 'GET'} ${url} - Will get new token.`);
-      return await _fetch(url, options, configOptions, tokenCache, true);
+      return await _fetch(url, opts, configOptions, tokenCache, true);
     }
   }
   return res;
@@ -162,18 +177,21 @@ function config(configOptions) {
   }
 
   const tokenCache = cache.config(configOptions.auth);
-  configOptions.headers = configOptions.headers || {};
   configOptions.headers = Object.assign(
     {
       'x-api-key': configOptions.auth.clientId,
       'x-request-id': () => generateRequestID(),
       'x-gw-ims-org-id': configOptions.auth.orgId
     },
-    configOptions.headers
+    normalizeHeaders(configOptions.headers)
   );
 
   return (url, options = {}) =>
     adobefetch(url, options, configOptions, tokenCache);
 }
 
-module.exports = { config: config };
+module.exports = {
+  config: config,
+  normalizeHeaders: normalizeHeaders,
+  generateRequestID: generateRequestID
+};
