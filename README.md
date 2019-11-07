@@ -128,7 +128,7 @@ const config = {
 };
 ```
 
-The following headers are added automatically by adobe-fetch, you can override all of them besides **authorization***[]: 
+The following headers are added automatically. You can override all of them except **authorization**: 
 
 - authorization
 - x-api-key
