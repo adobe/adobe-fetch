@@ -56,7 +56,17 @@ describe('Validate headers behavior', () => {
     expectHeader('x-api-key', 'test');
     const testFetch = adobefetch.config({
       auth: mockData.config,
-      headers: { ['X-API-KEY']: 'test' }
+      headers: { 'X-API-KEY': 'test' }
+    });
+    return testFetch(mockData.url);
+  });
+
+  test('predefined headers can be a function', () => {
+    expect.assertions(2);
+    expectHeader('someheader', 'testThis');
+    const testFetch = adobefetch.config({
+      auth: mockData.config,
+      headers: { someHeader: () => 'test' + 'This' }
     });
     return testFetch(mockData.url);
   });
