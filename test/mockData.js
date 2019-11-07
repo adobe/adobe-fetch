@@ -39,6 +39,12 @@ module.exports = {
     statusText: 'Unauthorized',
     ok: false
   },
+  responseUnauthorizedOther: {
+    url: MOCK_URL,
+    status: 444,
+    statusText: 'Unauthorized',
+    ok: false
+  },
   config: {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,

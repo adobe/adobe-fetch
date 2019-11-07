@@ -14,7 +14,6 @@ const fetch = require('node-fetch');
 const cache = require('./src/cache');
 const uuid = require('uuid/v4');
 const auth = require('@adobe/jwt-auth');
-const merge = require('deepmerge');
 const debug = require('debug')('@adobe/fetch');
 const NO_CONFIG = 'Auth configuration missing.';
 
@@ -44,33 +43,41 @@ function capFirst(s) {
   return s[0].toUpperCase() + s.slice(1);
 }
 
-function addAuthHeaders(token, options, authOptions) {
-  const tokenType = capFirst(token.token_type);
-  let apiKey = authOptions.clientId;
-  let xrequestid = uuid().replace(/-/g, '');
+function generateRequestID() {
+  return uuid().replace(/-/g, '');
+}
+
+function addHeaders(token, options, predefinedHeaders) {
+  let headers = {};
+
+  for (let name in predefinedHeaders) {
+    const value = predefinedHeaders[name];
+    headers[name.toLowerCase()] = typeof value === 'function' ? value() : value;
+  }
 
   if (options.headers) {
-    if (options.headers['x-api-key']) {
-      apiKey = options.headers['x-api-key'];
-    }
-    if (options.headers['x-request-id']) {
-      xrequestid = options.headers['x-request-id'];
+    if (typeof options.headers.entries === 'function') {
+      // This is a headers object, iterate with for..of.
+      for (let pair of options.headers.entries()) {
+        const [name, value] = pair;
+        headers[name.toLowerCase()] = value;
+      }
+    } else {
+      // This is a normal JSON. Iterate with for.. in
+      for (let name in options.headers) {
+        headers[name.toLowerCase()] = options.headers[name];
+      }
     }
   }
 
-  return merge(options, {
-    headers: {
-      authorization: `${tokenType} ${token.access_token}`,
-      'x-api-key': apiKey,
-      'x-request-id': xrequestid,
-      'x-gw-ims-org-id': authOptions.orgId
-    }
-  });
+  headers.authorization = `${capFirst(token.token_type)} ${token.access_token}`;
+  options.headers = headers;
+  return options;
 }
 
 async function _fetch(url, options, configOptions, tokenCache, forceNewToken) {
   const token = await getToken(configOptions.auth, tokenCache, forceNewToken);
-  const opts = addAuthHeaders(token, options, configOptions.auth);
+  const opts = addHeaders(token, options, configOptions.headers);
 
   debug(
     `${opts.method || 'GET'} ${url} - x-request-id: ${
@@ -155,6 +162,15 @@ function config(configOptions) {
   }
 
   const tokenCache = cache.config(configOptions.auth);
+  configOptions.headers = configOptions.headers || {};
+  configOptions.headers = Object.assign(
+    {
+      'x-api-key': configOptions.auth.clientId,
+      'x-request-id': () => generateRequestID(),
+      'x-gw-ims-org-id': configOptions.auth.orgId
+    },
+    configOptions.headers
+  );
 
   return (url, options = {}) =>
     adobefetch(url, options, configOptions, tokenCache);

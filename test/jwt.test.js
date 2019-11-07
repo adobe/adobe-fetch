@@ -144,6 +144,16 @@ describe('Validate auth behavior', () => {
     await testFetch(mockData.url);
   });
 
+  test('returns response when fetch returns 444', async () => {
+    fetch.mockImplementation(() =>
+      Promise.resolve(mockData.responseUnauthorizedOther)
+    );
+    const res = await testFetch(mockData.url);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(444);
+    expect(res.ok).toBe(false);
+  });
+
   test('allows x-api-key override', async () => {
     expect.assertions(5);
     fetch.mockImplementation((url, options) =>
