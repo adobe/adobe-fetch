@@ -49,9 +49,9 @@ npm install --save @adobe/fetch
 
 ```
 
-#### Config object
+#### Config Auth object
 
-The `config` object is where you pass in all the required and optional parameters to authenticate API calls.
+The `config.auth` object is where you pass in all the required and optional parameters to authenticate API calls.
 
 | parameter          | integration name     | required | type                              | default                        |
 | ------------------ | -------------------- | -------- | --------------------------------- | ------------------------------ |
@@ -105,6 +105,35 @@ const config = {
 ```
 
 This is the recommended approach.
+
+#### Predefined Headers
+
+If you have HTTP headers that are required for each request, you can provide them in the configuration.
+They will be then added automatically to each request.
+
+You can provide either a value or a function. 
+A function can be used when you need to generate a dynamic header value on each request.
+
+For example:
+
+```javascript
+const config = {
+  auth: {
+    ... Auth Configuration ...
+  },
+  headers: {
+    'x-sandbox-name': 'prod',
+    'x-request-id': () => idGenerationFunc()
+  }
+};
+```
+
+The following headers are added automatically by adobe-fetch, you can override all of them besides **authorization***[]: 
+
+- authorization
+- x-api-key
+- x-request-id
+- x-gw-ims-org-id
 
 #### Custom Storage
 
