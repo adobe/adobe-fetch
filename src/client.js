@@ -1,0 +1,1 @@
+window.adobefetch = require('../index');

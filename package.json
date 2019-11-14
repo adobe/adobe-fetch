@@ -3,6 +3,7 @@
   "version": "0.2.4",
   "description": "Call Adobe APIs",
   "main": "index.js",
+  "browser": "dist/client.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/adobe/adobe-fetch.git"
@@ -16,7 +17,8 @@
   "scripts": {
     "lint": "eslint src test sample index.js",
     "run": "node index.js",
-    "test": "jest"
+    "test": "jest",
+    "buildclient": "webpack"
   },
   "keywords": [
     "jwt",
@@ -43,7 +45,9 @@
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-prettier": "^3.1.1",
     "jest": "^24.9.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
