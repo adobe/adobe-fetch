@@ -146,8 +146,8 @@ A valid token has the following structure:
 
 #### Using in the browser
 
-In the browser only the **Provided** mode explained above is default, JWT is not supported. 
-This is because the JWT workflow requires direct access to the private key and should be done in the server for security reasons. With Provided mode the access token can be acquired via a standard OAuth authentication flow and then used by adobe-fetch to call Adobe APIs.
+In the browser only the **Provided** mode explained above is default, JWT is not supported.  
+This is because the JWT workflow requires direct access to the private key and should be done in the server for security reasons.  With Provided mode the access token can be acquired via a standard OAuth authentication flow and then used by adobe-fetch to call Adobe APIs.
 
 Using ```require('@adobe/fetch')``` in a web app will automatically use the browser version. You can also include the [bundled JS](dist/client.js) file directly in a script tag.
 
