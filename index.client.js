@@ -12,10 +12,9 @@ governing permissions and limitations under the License.
 
 const adobefetch = require('./src/adobefetch');
 const storage = require('./src/storageBrowser');
-const auth = require('@adobe/jwt-auth');
 
 module.exports = {
-  config: adobefetch.getConfig(storage, auth),
+  config: adobefetch.getConfig(storage),
   normalizeHeaders: adobefetch.normalizeHeaders,
   generateRequestID: adobefetch.generateRequestID,
   AUTH_MODES: adobefetch.AUTH_MODES

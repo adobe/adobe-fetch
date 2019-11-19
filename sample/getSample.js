@@ -27,9 +27,13 @@ SAMPLE_URL=<API URL>
 Alternatively, change the code below to use fs.readFileSync to read the private key from a file.
  */
 
+const AdobeFetch = require('../index.js');
+const { AUTH_MODES } = AdobeFetch;
+
 async function main() {
-  const adobefetch = require('../index.js').config({
+  const adobefetch = AdobeFetch.config({
     auth: {
+      mode: AUTH_MODES.JWT,
       clientId: process.env.APIKEY,
       clientSecret: process.env.SECRET,
       technicalAccountId: process.env.ACCOUNT_ID,

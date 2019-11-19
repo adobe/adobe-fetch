@@ -39,16 +39,4 @@ const clientConfig = {
   }
 };
 
-const clientNoJWTConfig = {
-  target: 'web',
-  entry: './index.client.nojwt.js',
-  mode: 'production',
-  output: {
-    filename: 'client.nojwt.js',
-    path: path.resolve(__dirname, 'dist'),
-    library: '@adobe/fetch',
-    libraryTarget: 'commonjs2'
-  }
-};
-
-module.exports = [clientConfig, clientNoJWTConfig, serverConfig];
+module.exports = [clientConfig, serverConfig];

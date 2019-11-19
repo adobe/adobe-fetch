@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const adobefetch = require('../index');
-const adobefetchNoJWT = require('../index.client.nojwt');
+const adobefetchBrowser = require('../index.client');
 const mockData = require('./mockData');
 
 const { AUTH_MODES } = adobefetch;
@@ -169,7 +169,7 @@ describe('Validate Provided config', () => {
 describe('Validate No JWT config', () => {
   test('JWT mode not supported', () => {
     return expect(() =>
-      adobefetchNoJWT.config({
+      adobefetchBrowser.config({
         auth: {
           mode: AUTH_MODES.JWT,
           clientSecret,
@@ -215,7 +215,7 @@ describe('Other config tests', () => {
       orgId,
       tokenProvider
     };
-    adobefetchNoJWT.config({
+    adobefetchBrowser.config({
       auth: config
     });
     expect(config.mode).toBe(AUTH_MODES.Provided);
