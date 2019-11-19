@@ -16,7 +16,10 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2017
   },
-
+  globals: {
+    fetch: "readonly",
+    localStorage: "readonly"
+  },
   env: {
     es6: true,
     jest: true,
