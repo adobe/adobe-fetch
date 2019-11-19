@@ -11,17 +11,22 @@ governing permissions and limitations under the License.
 */
 
 const adobefetch = require('../index');
+const adobefetchNoJWT = require('../index.client.nojwt');
+const mockData = require('./mockData');
 
-let {
+const { AUTH_MODES } = adobefetch;
+
+const {
   clientId,
   technicalAccountId,
   orgId,
   clientSecret,
   privateKey,
   metaScopes
-} = require('./mockData').config;
+} = mockData.config;
+const { tokenProvider } = mockData.providedConfig;
 
-describe('Validate input', () => {
+describe('Validate JWT config', () => {
   test('all parameters missing', () => {
     expect.assertions(1);
     return expect(() => adobefetch.config({})).toThrow(
@@ -104,5 +109,115 @@ describe('Validate input', () => {
         }
       })
     ).toThrow('Required parameter privateKey is invalid');
+  });
+});
+
+describe('Validate Provided config', () => {
+  test('all parameters missing', () => {
+    return expect(() =>
+      adobefetch.config({ mode: AUTH_MODES.Provided })
+    ).toThrow('Auth configuration missing.');
+  });
+  test('missing clientId', () => {
+    return expect(() =>
+      adobefetch.config({
+        auth: {
+          mode: AUTH_MODES.Provided,
+          orgId,
+          tokenProvider
+        }
+      })
+    ).toThrow('Required parameter(s) clientId are missing');
+  });
+  test('missing orgId', () => {
+    return expect(() =>
+      adobefetch.config({
+        auth: {
+          mode: AUTH_MODES.Provided,
+          clientId,
+          tokenProvider
+        }
+      })
+    ).toThrow('Required parameter(s) orgId are missing');
+  });
+  test('missing tokenProvider', () => {
+    return expect(() =>
+      adobefetch.config({
+        auth: {
+          mode: AUTH_MODES.Provided,
+          orgId,
+          clientId
+        }
+      })
+    ).toThrow('Required parameter(s) tokenProvider are missing');
+  });
+
+  test('tokenProvider should be a function', () => {
+    return expect(() =>
+      adobefetch.config({
+        auth: {
+          mode: AUTH_MODES.Provided,
+          orgId,
+          clientId,
+          tokenProvider: 'NOT A FUNCTION'
+        }
+      })
+    ).toThrow('Required parameter tokenProvider needs to be a function');
+  });
+});
+
+describe('Validate No JWT config', () => {
+  test('JWT mode not supported', () => {
+    return expect(() =>
+      adobefetchNoJWT.config({
+        auth: {
+          mode: AUTH_MODES.JWT,
+          clientSecret,
+          technicalAccountId,
+          orgId,
+          metaScopes,
+          privateKey
+        }
+      })
+    ).toThrow('JWT authentication is not available in current setup.');
+  });
+});
+
+describe('Other config tests', () => {
+  test('Other modes not supported', () => {
+    return expect(() =>
+      adobefetch.config({
+        auth: {
+          mode: 'testmode'
+        }
+      })
+    ).toThrow('Invalid authentication mode - testmode');
+  });
+
+  test('JWT mode is default', () => {
+    let config = {
+      clientId,
+      technicalAccountId,
+      orgId,
+      clientSecret,
+      privateKey,
+      metaScopes
+    };
+    adobefetch.config({
+      auth: config
+    });
+    expect(config.mode).toBe(AUTH_MODES.JWT);
+  });
+
+  test('Provided mode is default in nojwt', () => {
+    let config = {
+      clientId,
+      orgId,
+      tokenProvider
+    };
+    adobefetchNoJWT.config({
+      auth: config
+    });
+    expect(config.mode).toBe(AUTH_MODES.Provided);
   });
 });

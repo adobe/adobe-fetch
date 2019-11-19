@@ -11,8 +11,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const storage = require('./storage');
-
 // Consider a token expired 60 seconds before its calculated expiry time.
 const EXPIRY_THRESHOLD = 60 * 1000;
 
@@ -87,10 +85,12 @@ async function getToken(key, cache) {
   }
 }
 
-function config(options) {
+function config(options, defaultStorage) {
   const disableStorage = (options && options.disableStorage) || false;
-  const readFunc = options.storage ? options.storage.read : storage.read;
-  const writeFunc = options.storage ? options.storage.write : storage.write;
+  const readFunc = options.storage ? options.storage.read : defaultStorage.read;
+  const writeFunc = options.storage
+    ? options.storage.write
+    : defaultStorage.write;
 
   const cache = {
     disableStorage: disableStorage,
