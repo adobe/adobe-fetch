@@ -18,7 +18,7 @@ const TOKENS = 'tokens';
  * @returns Promise
  */
 async function read() {
-  return localStorage.getItem(TOKENS);
+  return JSON.parse(window.localStorage.getItem(TOKENS));
 }
 
 /**
@@ -28,7 +28,7 @@ async function read() {
  * @returns {*}
  */
 async function write(tokens) {
-  return localStorage.setItem(TOKENS, tokens);
+  return window.localStorage.setItem(TOKENS, JSON.stringify(tokens));
 }
 
 module.exports.read = read;

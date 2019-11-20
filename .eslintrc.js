@@ -18,7 +18,8 @@ module.exports = {
   },
   globals: {
     fetch: "readonly",
-    localStorage: "readonly"
+    localStorage: "readonly",
+    window: "readonly"
   },
   env: {
     es6: true,
