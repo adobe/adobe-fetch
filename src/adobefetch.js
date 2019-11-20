@@ -16,8 +16,7 @@ const debug = require('debug')('@adobe/fetch');
 const NO_CONFIG = 'Auth configuration missing.';
 const AUTH_MODES = {
   JWT: 'jwt',
-  Provided: 'provided',
-  Default: 'jwt'
+  Provided: 'provided'
 };
 
 async function getToken(authOptions, tokenCache, forceNewToken, auth) {
@@ -220,7 +219,7 @@ function prepareConfig(config, hasAuthFunction) {
   } else {
     if (!config.auth.mode) {
       config.auth.mode = hasAuthFunction
-        ? AUTH_MODES.Default
+        ? AUTH_MODES.JWT
         : AUTH_MODES.Provided;
     }
     verifyAuthConfig(config.auth, hasAuthFunction);
