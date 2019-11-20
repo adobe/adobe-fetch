@@ -218,9 +218,7 @@ function prepareConfig(config, hasAuthFunction) {
     throw NO_CONFIG;
   } else {
     if (!config.auth.mode) {
-      config.auth.mode = hasAuthFunction
-        ? AUTH_MODES.JWT
-        : AUTH_MODES.Provided;
+      config.auth.mode = hasAuthFunction ? AUTH_MODES.JWT : AUTH_MODES.Provided;
     }
     verifyAuthConfig(config.auth, hasAuthFunction);
   }
