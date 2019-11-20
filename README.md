@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.com/adobe/adobe-fetch.svg?branch=master)](https://travis-ci.com/adobe/adobe-fetch)
 [![codecov](https://codecov.io/gh/adobe/adobe-fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/adobe-fetch)
 [![Greenkeeper badge](https://badges.greenkeeper.io/adobe/adobe-fetch.svg)](https://greenkeeper.io/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/adobe/adobe-fetch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/adobe/adobe-fetch/context:javascript)
 
 # adobe-fetch
 
