@@ -146,7 +146,7 @@ A valid token has the following structure:
 
 #### Using in the browser
 
-In the browser only the **Provided** mode explained above is default, JWT is not supported.  
+In the browser only the **Provided** mode explained above is allowed, JWT is not supported.  
 
 This is because the JWT workflow requires direct access to the private key and should be done in the server for security reasons.  With Provided mode the access token can be acquired via a standard OAuth authentication flow and then used by adobe-fetch to call Adobe APIs.
 
