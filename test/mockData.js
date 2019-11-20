@@ -18,7 +18,13 @@ const PRIVATE_KEY = 'aalsdjfajsldjfalsjkdfa ,lsjf ,aljs';
 const IMS = 'https://ims-na1.adobelogin.com';
 const SCOPES = ['ent_dataservices_sdk'];
 const TOKEN_KEY = `${CLIENT_ID}|${SCOPES.join(',')}`;
+const TOKEN_PROVIDED_KEY = `${CLIENT_ID}|org-${ORG_ID}`;
 const MOCK_URL = 'https://mock.com/mock';
+const DEFAULT_TOKEN = {
+  token_type: 'bearer',
+  access_token: 'abcdef',
+  expires_in: 86399956
+};
 
 module.exports = {
   responseOK: {
@@ -54,12 +60,23 @@ module.exports = {
     privateKey: PRIVATE_KEY,
     ims: IMS
   },
-  token_key: TOKEN_KEY,
-  token: {
-    token_type: 'bearer',
-    access_token: 'abcdef',
-    expires_in: 86399956
+  providedConfig: {
+    mode: 'provided',
+    clientId: CLIENT_ID,
+    orgId: ORG_ID,
+    tokenProvider: async () => DEFAULT_TOKEN
   },
+  customProvidedConfig: provider => {
+    return {
+      mode: 'provided',
+      clientId: CLIENT_ID,
+      orgId: ORG_ID,
+      tokenProvider: provider
+    };
+  },
+  token_key: TOKEN_KEY,
+  token_provided_key: TOKEN_PROVIDED_KEY,
+  token: DEFAULT_TOKEN,
   token2: {
     token_type: 'bearer',
     access_token: 'mhmhmhmh',
@@ -67,6 +84,12 @@ module.exports = {
   },
   valid_token: {
     [TOKEN_KEY]: {
+      token_type: 'bearer',
+      access_token: 'abcabc',
+      expires_in: 86399956,
+      expires_at: Date.now() + 100000
+    },
+    [TOKEN_PROVIDED_KEY]: {
       token_type: 'bearer',
       access_token: 'abcabc',
       expires_in: 86399956,

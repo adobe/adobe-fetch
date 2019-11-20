@@ -15,7 +15,9 @@ Call Adobe APIs
 Make calling Adobe APIs a breeze!  
 
 This package will handle JWT authentication, token caching and storage.  
-Otherwise it works exactly as [fetch](https://github.com/bitinn/node-fetch)
+Otherwise it works exactly as [fetch](https://github.com/bitinn/node-fetch).
+
+This library now works in the browser as well, see information below. 
 
 ### Installation
 
@@ -27,6 +29,7 @@ npm install --save @adobe/fetch
 
 ```javascript
 
+    const AdobeFetch = require('@adobe/fetch');
     const fs = require('fs');
     
     const config = { 
@@ -41,7 +44,7 @@ npm install --save @adobe/fetch
     
     config.auth.privateKey = fs.readFileSync('private.key');
 
-    const adobefetch = require('@adobe/fetch').config(config);
+    const adobefetch = AdobeFetch.config(config);
 
     adobefetch("https://platform.adobe.io/some/adobe/api", { method: 'get'})
       .then(response => response.json())
@@ -105,6 +108,51 @@ const config = {
 ```
 
 This is the recommended approach.
+
+#### Alternative authentication methods
+
+To use this library with an alternative authentication flow such as OAuth, or execute the JWT authentication flow outside of adobe-fetch, it is possible to use the **Provided** mode and provide the access token directly to adobe-fetch via an asynchronious function:
+
+```javascript
+
+    const AdobeFetch = require('@adobe/fetch');
+    const { AUTH_MODES } = AdobeFetch;
+
+    const adobefetch = AdobeFetch).config({ 
+      auth: {
+          mode: AUTH_MODES.Provided,
+          clientId: 'asasdfasf',
+          orgId: 'asdfasdfasdf@AdobeOrg',
+          tokenProvider: async () => { ... Logic returning a valid access token object ... }
+      }
+    });
+
+    adobefetch("https://platform.adobe.io/some/adobe/api", { method: 'get'})
+      .then(response => response.json())
+      .then(json => console.log('Result: ',json));
+
+```
+
+When the **adobefetch** call above happens for the first time, it will call the tokenProvider function provided and wait for it to return the access token. Access token is then cached and persisted, if it expires or is rejected by the API, the tokenProvider function will be called again to acquire a new token.
+
+A valid token has the following structure:
+```
+  {
+    token_type: 'bearer',
+    access_token: <<<TOKEN>>>,
+    expires_in: <<<EXPIRY_IN_MILLISECONDS>>>
+  }
+```
+
+#### Using in the browser
+
+In the browser only the **Provided** mode explained above is default, JWT is not supported.  
+
+This is because the JWT workflow requires direct access to the private key and should be done in the server for security reasons.  With Provided mode the access token can be acquired via a standard OAuth authentication flow and then used by adobe-fetch to call Adobe APIs.
+
+Using ```require('@adobe/fetch')``` in a web app will automatically use the browser version.  
+You can also include the [bundled JS](dist/client.js) file directly in a script tag.
+
 
 #### Predefined Headers
 

@@ -10,14 +10,26 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const storage = require('./src/storage');
-const auth = require('@adobe/jwt-auth');
-global.fetch = require('node-fetch');
-const adobefetch = require('./src/adobefetch');
+const TOKENS = 'tokens';
 
-module.exports = {
-  config: adobefetch.getConfig(storage, auth),
-  normalizeHeaders: adobefetch.normalizeHeaders,
-  generateRequestID: adobefetch.generateRequestID,
-  AUTH_MODES: adobefetch.AUTH_MODES
-};
+/**
+ * Reads token cache from storage.
+ *
+ * @returns Promise
+ */
+async function read() {
+  return JSON.parse(window.localStorage.getItem(TOKENS));
+}
+
+/**
+ * Saves token cache to storage.
+ *
+ * @param tokens
+ * @returns {*}
+ */
+async function write(tokens) {
+  return window.localStorage.setItem(TOKENS, JSON.stringify(tokens));
+}
+
+module.exports.read = read;
+module.exports.write = write;
