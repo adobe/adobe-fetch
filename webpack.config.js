@@ -11,7 +11,6 @@ governing permissions and limitations under the License.
 */
 
 const path = require('path');
-const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
 const serverConfig = {
