@@ -234,7 +234,7 @@ function prepareConfig(config, hasAuthFunction) {
 }
 
 function getConfig(storage, auth = undefined) {
-  return configOptions => {
+  return (configOptions) => {
     prepareConfig(configOptions, !!auth);
 
     const tokenCache = cache.config(configOptions.auth, storage);

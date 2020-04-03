@@ -66,7 +66,7 @@ module.exports = {
     orgId: ORG_ID,
     tokenProvider: async () => DEFAULT_TOKEN
   },
-  customProvidedConfig: provider => {
+  customProvidedConfig: (provider) => {
     return {
       mode: 'provided',
       clientId: CLIENT_ID,
