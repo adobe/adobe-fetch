@@ -97,7 +97,7 @@ describe('Validate auth behavior', () => {
 
   test('get new token when cached expires', async () => {
     expect.assertions(7);
-    storage.getItem = jest.fn(key => {
+    storage.getItem = jest.fn((key) => {
       expect(key).toBe(TOKENS_KEY);
       return Promise.resolve(mockData.expiring_token);
     });

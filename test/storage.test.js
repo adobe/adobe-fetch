@@ -16,12 +16,12 @@ const adobefetch = require('../index');
 const adobefetchBrowser = require('../index.client');
 const mockData = require('./mockData');
 
-const localStorageMock = (function() {
+const localStorageMock = (function () {
   let store = {};
   return {
-    getItem: key => store[key] || null,
+    getItem: (key) => store[key] || null,
     setItem: (key, value) => (store[key] = value.toString()),
-    removeItem: key => delete store[key],
+    removeItem: (key) => delete store[key],
     clear: () => (store = {})
   };
 })();
@@ -141,7 +141,7 @@ describe('Validate custom storage', () => {
           read: async () => {
             return cached;
           },
-          write: async tokens => {
+          write: async (tokens) => {
             cached = tokens;
           }
         }
@@ -171,7 +171,7 @@ describe('Validate custom storage', () => {
           read: () => {
             return Promise.resolve(cached);
           },
-          write: tokens => {
+          write: (tokens) => {
             cached = tokens;
             return Promise.resolve();
           }

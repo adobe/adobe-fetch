@@ -102,7 +102,7 @@ function config(options, defaultStorage) {
 
   return {
     set: (key, token) => setToken(key, token, cache),
-    get: key => getToken(key, cache)
+    get: (key) => getToken(key, cache)
   };
 }
 
