@@ -1,6 +1,6 @@
 {
   "name": "@adobe/fetch",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Call Adobe APIs",
   "main": "dist/server.js",
   "browser": "dist/client.js",
