@@ -16,10 +16,10 @@ jobs:
       with:
         node-version: 14.x
     - name: install
-    - run: yarn version
-    - run: yarn global codecov
-    - run: yarn install
+      run: yarn install
+    - name: install codecov
+      run: yarn global codecov
     - name: test
-    - run: yarn test
+      run: yarn test
     - name: coverage
-    - run: codecov
+      run: codecov
