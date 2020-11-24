@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const auth = require('@adobe/jwt-auth');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const storage = require('node-persist');
 const fetch = require('node-fetch');
 const mockData = require('./mockData');

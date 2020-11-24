@@ -15,7 +15,7 @@ const adobefetch = require('../index');
 const storage = require('node-persist');
 const fetch = require('node-fetch');
 const mockData = require('./mockData');
-const { Headers } = require.requireActual('node-fetch');
+const { Headers } = jest.requireActual('node-fetch');
 
 jest.mock('@adobe/jwt-auth');
 jest.mock('node-persist');
