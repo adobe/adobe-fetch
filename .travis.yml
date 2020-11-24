@@ -13,12 +13,12 @@ node_js:
   - '12'
 
 install:
-  - npm version
-  - npm install -g codecov
-  - npm install
+  - yarn version
+  - yarn global codecov
+  - yarn install
 
 script:
-  - npm test
+  - yarn test
 
 after_success:
   - codecov
