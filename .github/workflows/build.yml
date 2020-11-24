@@ -1,0 +1,25 @@
+name: build-package
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node.js v14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+    - name: install
+    - run: yarn version
+    - run: yarn global codecov
+    - run: yarn install
+    - name: test
+    - run: yarn test
+    - name: coverage
+    - run: codecov
