@@ -18,7 +18,7 @@ jobs:
     - name: install
       run: yarn install
     - name: install codecov
-      run: yarn global codecov
+      run: yarn global add codecov
     - name: test
       run: yarn test
     - name: coverage
