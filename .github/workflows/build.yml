@@ -1,0 +1,23 @@
+name: build-package
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Node.js v14
+      uses: actions/setup-node@master
+      with:
+        node-version: 14.x
+    - name: install
+      run: yarn install
+    - name: test
+      run: yarn test
+    - name: coverage
+      run: npx codecov
