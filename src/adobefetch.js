@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const cache = require('./cache');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const debug = require('debug')('@adobe/fetch');
 const NO_CONFIG = 'Auth configuration missing.';
 const AUTH_MODES = {
