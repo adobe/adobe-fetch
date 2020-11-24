@@ -2,9 +2,9 @@ name: build-package
 
 on:
   push:
+    branches: [ master ]
   pull_request:
-  schedule:
-    - cron: '0 0 * * 0' # weekly
+    branches: [ master ]
 
 jobs:
   build:
