@@ -21,3 +21,5 @@ jobs:
       run: yarn test
     - name: coverage
       run: npx codecov
+    - name: build
+      run: yarn build
