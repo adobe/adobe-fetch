@@ -17,9 +17,7 @@ jobs:
         node-version: 14.x
     - name: install
       run: yarn install
-    - name: install codecov
-      run: yarn global add codecov
     - name: test
       run: yarn test
     - name: coverage
-      run: codecov
+      run: npx codecov
