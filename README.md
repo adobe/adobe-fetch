@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
 [![Version](https://img.shields.io/npm/v/@adobe/fetch.svg)](https://npmjs.org/package/@adobe/fetch)
 [![Downloads/week](https://img.shields.io/npm/dw/@adobe/fetch.svg)](https://npmjs.org/package/@adobe/fetch)
-[![Build Status](https://travis-ci.com/adobe/adobe-fetch.svg?branch=master)](https://travis-ci.com/adobe/adobe-fetch)
+[![Build Status](https://github.com/adobe/adobe-fetch/actions/workflows/build.yml/badge.svg)](https://github.com/adobe/adobe-fetch/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/adobe/adobe-fetch/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/adobe-fetch)
 
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/adobe/adobe-fetch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/adobe/adobe-fetch/context:javascript)
