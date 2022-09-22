@@ -34,7 +34,7 @@
   "dependencies": {
     "@adobe/jwt-auth": "^0.3.1",
     "debug": "^4.3.1",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "node-fetch": "^2.6.1",
     "node-persist": "^3.1.0",
     "uuid": "^8.3.1"
